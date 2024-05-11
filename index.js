@@ -1,17 +1,20 @@
-function combinationSum(candidates, target) {
+function zigzagLevelOrder(root) {
+  if (!root) return [];
   const result = [];
-  backtrack(0, [], 0);
-  return result;
-  function backtrack(start, current, sum) {
-    if (sum === target) {
-      result.push([...current]);
-      return;
+  const queue = [root];
+  let zigzag = false;
+  while (queue.length) {
+    const levelSize = queue.length;
+    const currentLevel = [];
+    for (let i = 0; i < levelSize; i++) {
+      const node = queue.shift();
+      if (zigzag) currentLevel.unshift(node.val);
+      else currentLevel.push(node.val);
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
     }
-    if (sum > target || start === candidates.length) return;
-    for (let i = start; i < candidates.length; i++) {
-      current.push(candidates[i]);
-      backtrack(i, current, sum + candidates[i]);
-      current.pop();
-    }
+    result.push(currentLevel);
+    zigzag = !zigzag;
   }
+  return result;
 }
